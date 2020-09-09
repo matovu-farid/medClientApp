@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "60053725903",
+    "firebase_url": "https://medcare-insurace.firebaseio.com",
+    "project_id": "medcare-insurace",
+    "storage_bucket": "medcare-insurace.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:60053725903:android:f6dd793eeac88840b90dba",
+        "android_client_info": {
+          "package_name": "com.example.medClientApp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "60053725903-i91spk4agdue4haqh3odb6khlf60r6ho.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBqm0rCeTd1wOiOigVQoylKBXCoEDEH9vk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "60053725903-i91spk4agdue4haqh3odb6khlf60r6ho.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
