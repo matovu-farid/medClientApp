@@ -49,6 +49,8 @@ class UserProfile {
 
   List<Map<String, String>> toList() {
     return [
+      {'name':name},
+      {'Registration Date':regDate},
       {'Company': company.companyName},
       {'Occupation': occupation},
       {'Phone number': phoneNumber},

@@ -12,8 +12,13 @@ class MedClientApp extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     final Future<FirebaseApp> _initialization = Firebase.initializeApp();
-    return MaterialApp(home: Scaffold(
-      appBar: AppBar(title: Text("My App"),),
+    return MaterialApp(
+
+      theme: ThemeData(
+        primaryColor: Colors.green,
+      ),
+      home: Scaffold(
+      appBar: AppBar(title: Center(child: Text("Medcare Client App")),),
       body: FutureBuilder(
         future:_initialization,
         builder: (context, snapshot) {

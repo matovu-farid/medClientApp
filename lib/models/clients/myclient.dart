@@ -1,10 +1,8 @@
 
-
 import 'package:json_annotation/json_annotation.dart';
 import 'package:medClientApp/models/clients/history.dart';
 import 'package:medClientApp/models/clients/user_profile.dart';
 import 'package:uuid/uuid.dart';
-
 part 'myclient.g.dart';
 
 @JsonSerializable()
