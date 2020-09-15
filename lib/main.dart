@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 import 'package:medClientApp/retrieve_client.dart';
+import 'package:medClientApp/widgets/fetch_screen.dart';
 main(List<String> args){
   runApp(MedClientApp());
 }
@@ -19,6 +21,7 @@ class MedClientApp extends StatelessWidget{
       ),
       home: Scaffold(
       appBar: AppBar(title: Center(child: Text("Medcare Client App")),),
+      resizeToAvoidBottomInset: false,
       body: FutureBuilder(
         future:_initialization,
         builder: (context, snapshot) {
@@ -28,7 +31,10 @@ class MedClientApp extends StatelessWidget{
           if(snapshot.connectionState==ConnectionState.done){
             return GetClient();
           }
-          return Text('Loading');
+          return LoadingIndicator(
+            indicatorType: Indicator.ballPulse,
+            color: Colors.amber,
+          );
         }
       ),
     ),);
