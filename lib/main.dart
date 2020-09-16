@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:medClientApp/retrieve_client.dart';
-import 'package:medClientApp/widgets/fetch_screen.dart';
+
 main(List<String> args){
   runApp(MedClientApp());
 }

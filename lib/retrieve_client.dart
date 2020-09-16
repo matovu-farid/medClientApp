@@ -3,9 +3,10 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:loading_indicator/loading_indicator.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:medClientApp/models/clients/myclient.dart';
-import 'file:///C:/Users/Sarah/Desktop/medcareInsApp/medClientApp/lib/widgets/views/user_profile_display.dart';
 import 'package:medClientApp/widgets/view_options.dart';
 
 //FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -36,6 +37,40 @@ class _GetClientState extends State<GetClient> {
     super.dispose();
   }
 
+  final LocalAuthentication auth = LocalAuthentication();
+
+  String _authorized = 'Not Authorized';
+  bool _isAuthenticating = false;
+
+  Future<void> _authenticate() async {
+    bool authenticated = false;
+    try {
+      setState(() {
+        _isAuthenticating = true;
+        _authorized = 'Authenticating';
+      });
+      authenticated = await auth.authenticateWithBiometrics(
+          localizedReason: 'Scan your fingerprint to authenticate',
+          useErrorDialogs: true,
+          stickyAuth: true);
+      setState(() {
+        _isAuthenticating = false;
+        _authorized = 'Authenticating';
+      });
+    } on PlatformException catch (e) {
+      print(e);
+    }
+    if (!mounted) return;
+
+    final String message = authenticated ? 'Authorized' : 'Not Authorized';
+    setState(() {
+      _authorized = message;
+    });
+  }
+
+  void _cancelAuthentication() {
+    auth.stopAuthentication();
+  }
   @override
   Widget build(BuildContext context) {
     CollectionReference clients = FirebaseFirestore.instance.collection('clients');
@@ -57,16 +92,32 @@ class _GetClientState extends State<GetClient> {
                   _editingController.text = value;
                 },
               ),
-              FlatButton(
-                color: Colors.amber,
-                onPressed: () {
-                  OnTap().sink.add(_editingController.text);
-              },
-              child: Text('Fetch Client',
-                style:  TextStyle(
-                  color: Colors.white
-                ),
-              ),)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: FlatButton(
+                  color: Colors.amber,
+                  onPressed: () {
+                    OnTap().sink.add(_editingController.text);
+                  },
+                child: Text('Fetch Client',
+                  style:  TextStyle(
+                    color: Colors.white
+                  ),
+                ),),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: FlatButton(
+                  color: Colors.amber,
+                  onPressed: () {
+                    _authenticate();
+                  },
+                  child: Text('Authenticate',
+                    style:  TextStyle(
+                        color: Colors.white
+                    ),
+                  ),),
+              )
             ],
           ),
         ),
