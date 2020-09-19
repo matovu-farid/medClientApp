@@ -4,8 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+import 'package:medClientApp/med_client_provider.dart';
+import 'package:medClientApp/models/clients/history.dart';
 import 'package:medClientApp/models/clients/myclient.dart';
 import 'package:medClientApp/widgets/views/user_profile_display.dart';
+import 'package:provider/provider.dart';
 
 class HospitalServicesDisplay extends StatefulWidget{
 
@@ -35,6 +38,8 @@ class _HospitalServicesDisplayState extends State<HospitalServicesDisplay> {
     'isChecked':false})
       .toList();
 
+
+
   @override
   void initState() {
     super.initState();
@@ -63,20 +68,26 @@ class _HospitalServicesDisplayState extends State<HospitalServicesDisplay> {
       persistentFooterButtons: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: FlatButton(
-            color: Colors.amber,
-            onPressed: ()=>Navigator.of(context).pop(),
-            child: Icon(
-              LineAwesomeIcons.backward,
-              color: Colors.white,
-            ),
+          child: Consumer<GetClientProvider>(
+            builder: (context, provider,child) {
+              return FlatButton(
+                color: Colors.amber,
+                onPressed: (){
+                  provider.changeIsOptionsSelected();
+                  Navigator.of(context).pop();},
+                child: Icon(
+                  LineAwesomeIcons.backward,
+                  color: Colors.white,
+                ),
+              );
+            }
           ),
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: FlatButton(
             color: Colors.amber,
-            onPressed: ()=>submit(),
+            onPressed: submit,
             child: Text('Submit'),
           ),
         ),

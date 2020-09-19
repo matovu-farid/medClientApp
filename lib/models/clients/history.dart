@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'history.g.dart';
 
@@ -15,12 +16,14 @@ class UserHistory {
   String sum;
 
   UserHistory(
-      {this.hospitalLocation,
-      this.hospitalName,
-      this.patientInfo,
-      this.medicalInfo,
-      this.clarification,
-        this.iconPath});
+      {
+        @required this.hospitalLocation,
+        @required this.hospitalName,
+        @required this.patientInfo,
+        @required this.medicalInfo,
+        @required this.clarification,
+        @required this.iconPath
+      });
 
   factory UserHistory.fromJson(Map<String, dynamic> json) => _$UserHistoryFromJson(json);
   Map<String, dynamic> toJson() => _$UserHistoryToJson(this);
@@ -42,13 +45,15 @@ class MedicalInfo {
   final List<Map<String, int>> drugsPrescribed;
 
   MedicalInfo(
-      {this.drugsPrescribed,
-      this.natureOfillness,
-      this.diagnosis,
-      this.condition,
-      this.consultationFee,
-      this.hospitalServices,
-      this.results});
+      {
+        @required this.drugsPrescribed,
+        @required this.natureOfillness,
+        @required this.diagnosis,
+        @required this.condition,
+        @required this.consultationFee,
+        @required this.hospitalServices,
+        @required this.results
+      });
   factory MedicalInfo.fromJson(Map<String, dynamic> json) => _$MedicalInfoFromJson(json);
   Map<String, dynamic> toJson() => _$MedicalInfoToJson(this);
 
@@ -90,11 +95,13 @@ class PatientInfo {
   final String dateOfBirth;
 
   PatientInfo(
-      {this.patientName,
-      this.relationship,
-      this.medicalCardNo,
-      this.gender,
-      this.dateOfBirth});
+      {
+        @required this.patientName,
+        @required this.relationship,
+        @required this.medicalCardNo,
+        @required this.gender,
+        @required this.dateOfBirth
+      });
   factory PatientInfo.fromJson(Map<String, dynamic> json) => _$PatientInfoFromJson(json);
   Map<String, dynamic> toJson() => _$PatientInfoToJson(this);
 

@@ -1,6 +1,8 @@
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+import 'package:medClientApp/med_client_provider.dart';
 import 'package:medClientApp/models/clients/myclient.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class UserInfoDisplay extends StatelessWidget{
   final MyClient client;
@@ -12,12 +14,18 @@ class UserInfoDisplay extends StatelessWidget{
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-      floatingActionButton: FloatingActionButton(
-        child: Icon(
-          LineAwesomeIcons.backward,
-          color: Colors.white,
-        ),
-        onPressed: ()=>Navigator.of(context).pop(),),
+      floatingActionButton: Consumer<GetClientProvider>(
+        builder: (context, provider,child) {
+          return FloatingActionButton(
+            child: Icon(
+              LineAwesomeIcons.backward,
+              color: Colors.white,
+            ),
+            onPressed: (){
+              provider.changeIsOptionsSelected();
+              Navigator.of(context).pop();});
+        }
+      ),
       body: Container(
         child: ListView(
           physics: ClampingScrollPhysics(),

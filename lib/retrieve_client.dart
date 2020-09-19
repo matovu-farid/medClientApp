@@ -6,8 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:medClientApp/med_client_provider.dart';
 import 'package:medClientApp/models/clients/myclient.dart';
 import 'package:medClientApp/widgets/view_options.dart';
+import 'package:provider/provider.dart';
 
 //FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -51,7 +53,7 @@ class _GetClientState extends State<GetClient> {
       });
       authenticated = await auth.authenticateWithBiometrics(
           localizedReason: 'Scan your fingerprint to authenticate',
-          useErrorDialogs: true,
+          useErrorDialogs: false,
           stickyAuth: true);
       setState(() {
         _isAuthenticating = false;
@@ -77,75 +79,80 @@ class _GetClientState extends State<GetClient> {
     GlobalKey<FormState> formKey = GlobalKey<FormState>();
     String fetchedId;
 
-    return ListView(
-      children: [
-        SizedBox(
-          width: 300,
-          child: Wrap(
-            children: [
-              TextFormField(
-                controller: _editingController,
-                decoration: InputDecoration(
-                  labelText: 'Enter Id'
-                ),
-                onChanged: (value){
-                  _editingController.text = value;
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: FlatButton(
-                  color: Colors.amber,
-                  onPressed: () {
-                    OnTap().sink.add(_editingController.text);
-                  },
-                child: Text('Fetch Client',
-                  style:  TextStyle(
-                    color: Colors.white
-                  ),
-                ),),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: FlatButton(
-                  color: Colors.amber,
-                  onPressed: () {
-                    _authenticate();
-                  },
-                  child: Text('Authenticate',
-                    style:  TextStyle(
-                        color: Colors.white
+    return ChangeNotifierProvider<GetClientProvider>(
+      create: (context)=>GetClientProvider(),
+      child: ListView(
+        children: [
+
+          Consumer<GetClientProvider>(
+
+            builder: (context, provider,child) {
+              if(!provider.isOptionsSelected)
+              return SizedBox(
+                width: 300,
+                child: Wrap(
+                  children: [
+
+                    TextFormField(
+                      controller: _editingController,
+                      decoration: InputDecoration(
+                        labelText: 'Enter Id'
+                      ),
+                      onChanged: (value){
+                        _editingController.text = value;
+                      },
                     ),
-                  ),),
-              )
-            ],
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: FlatButton(
+                        color: Colors.amber,
+                        onPressed: () {
+                        //  await _authenticate();
+                          OnTap().sink.add(_editingController.text);
+                        },
+                      child: Text('Fetch Client',
+                        style:  TextStyle(
+                          color: Colors.white
+                        ),
+                      ),),
+                    ),
+
+                  ],
+                ),
+              );
+              return SizedBox(
+                width: 0,
+                height: 0,
+              );
+
+            }
           ),
-        ),
 
-        FutureBuilder<DocumentSnapshot>(
-          future: clients.doc(
-              '${_editingController.text}' ).get(),
-          builder:
-              (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          FutureBuilder<DocumentSnapshot>(
+            future: clients.doc(
+                '${_editingController.text}' ).get(),
+            builder:
+                (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
 
-            if (snapshot.hasError) {
-              return Text("Something went wrong");
-            }
+              if (snapshot.hasError) {
+                return Text("Something went wrong");
+              }
 
-            if (snapshot.connectionState == ConnectionState.done) {
-              Map<String, dynamic> data = snapshot.data.data();
-              MyClient client= MyClient.fromJson(parseString(data['client']));
-              parseString(data['client']);
-              return ViewOptions(client);
-            }
+              if (snapshot.connectionState == ConnectionState.done) {
+                Map<String, dynamic> data = snapshot.data.data();
+                MyClient client= MyClient.fromJson(parseString(data['client']));
+                parseString(data['client']);
+                return ViewOptions(client);
+              }
 
-            return LoadingIndicator(
-              indicatorType: Indicator.ballPulse,
-              color: Colors.amber,
-            );
-          },
-        ),
-      ],
+              return LoadingIndicator(
+                indicatorType: Indicator.ballPulse,
+                color: Colors.amber,
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }
