@@ -62,37 +62,18 @@ class _HospitalServicesDisplayState extends State<HospitalServicesDisplay> {
 
     //print('${hospitalList}');
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      resizeToAvoidBottomPadding: true,
-
-      persistentFooterButtons: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Consumer<GetClientProvider>(
-            builder: (context, provider,child) {
-              return FlatButton(
-                color: Colors.amber,
-                onPressed: (){
-                  provider.changeIsOptionsSelected();
-                  Navigator.of(context).pop();},
-                child: Icon(
-                  LineAwesomeIcons.backward,
-                  color: Colors.white,
-                ),
-              );
-            }
-          ),
+//      resizeToAvoidBottomInset: true,
+//      resizeToAvoidBottomPadding: true,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: FlatButton(
+          color: Colors.amber,
+          onPressed: submit,
+          child: Text('Submit'),
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: FlatButton(
-            color: Colors.amber,
-            onPressed: submit,
-            child: Text('Submit'),
-          ),
-        ),
+      ),
 
-      ],
+
 
 
       body: Container(
@@ -103,33 +84,35 @@ class _HospitalServicesDisplayState extends State<HospitalServicesDisplay> {
             height: 500,
             child: ListView(
               children: [
-                Center(
-                  child: FutureBuilder<DocumentSnapshot>(
-                    future: FirebaseFirestore.instance.collection('hospitals').doc('hospital-doc').get(),
-                    builder: (context, snapshot) {
-
-                      if(snapshot.hasError)return Text('Could not retrieve hospitals');
-                      if(snapshot.connectionState==ConnectionState.done)
-                      {
-                        final List hospitalListGot= json.decode(snapshot.data.data()['hospital']);
-                        final List<String> hospitalList = hospitalListGot.map((hospObj) => hospObj as String).toList();
-
-                      hospitalSelected = hospitalList.first;
-
-                        return MyDropDown(
-                          text: 'Hospital Name',
-
-                          dropdownNames: hospitalList,
-                        onChanged: (value) {
-                        hospitalSelected = value;
-                        },
-                          selectedItem: hospitalSelected,);
-
-                    }
-                      return Text('Loading');
-                    }
-                  ),
-                ),
+ //-----------------------------for hospital List-------------------------------------------
+//                Center(
+//                  child: FutureBuilder<DocumentSnapshot>(
+//                    future: FirebaseFirestore.instance.collection('hospitals').doc('hospital-doc').get(),
+//                    builder: (context, snapshot) {
+//
+//                      if(snapshot.hasError)return Text('Could not retrieve hospitals');
+//                      if(snapshot.connectionState==ConnectionState.done)
+//                      {
+//                        final List hospitalListGot= json.decode(snapshot.data.data()['hospital']);
+//                        final List<String> hospitalList = hospitalListGot.map((hospObj) => hospObj as String).toList();
+//
+//                      hospitalSelected = hospitalList.first;
+//
+//                        return MyDropDown(
+//                          text: 'Hospital Name',
+//
+//                          dropdownNames: hospitalList,
+//                        onChanged: (value) {
+//                        hospitalSelected = value;
+//                        },
+//                          selectedItem: hospitalSelected,);
+//
+//                    }
+//                      return Text('Loading');
+//                    }
+//                  ),
+//                ),
+//------------------------------------------------------------------------------------
                 Heading('In Patient Hospital Services'),
                 ...inPatientCollection.map((benefitMap) => SizedBox(
                   width: MediaQuery.of(context).size.width*0.9,
@@ -139,7 +122,6 @@ class _HospitalServicesDisplayState extends State<HospitalServicesDisplay> {
                         title: Text(benefitMap.keys.first),
                         value: benefitMap['isChecked'],
                         onChanged: (bool value) {
-
                           setState(() {
                             benefitMap['isChecked']= value;
                           });

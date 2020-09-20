@@ -53,11 +53,6 @@ MedicalInfo _$MedicalInfoFromJson(Map<String, dynamic> json) {
               (k, e) => MapEntry(k, e as int),
             ))
         ?.toList(),
-    results: (json['results'] as List)
-        ?.map((e) => (e as Map<String, dynamic>)?.map(
-              (k, e) => MapEntry(k, e as String),
-            ))
-        ?.toList(),
   );
 }
 
@@ -68,7 +63,6 @@ Map<String, dynamic> _$MedicalInfoToJson(MedicalInfo instance) =>
       'condition': instance.condition,
       'consultationFee': instance.consultationFee,
       'hospitalServices': instance.hospitalServices,
-      'results': instance.results,
       'drugsPrescribed': instance.drugsPrescribed,
     };
 

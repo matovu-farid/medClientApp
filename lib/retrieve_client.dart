@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:medClientApp/med_client_provider.dart';
@@ -128,28 +129,58 @@ class _GetClientState extends State<GetClient> {
             }
           ),
 
-          FutureBuilder<DocumentSnapshot>(
-            future: clients.doc(
-                '${_editingController.text}' ).get(),
-            builder:
-                (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          Stack(
+            children: [
 
-              if (snapshot.hasError) {
-                return Text("Something went wrong");
-              }
+              Align(
+                alignment: Alignment.center,
+                child: FutureBuilder<DocumentSnapshot>(
+                  future: clients.doc(
+                      '${_editingController.text}' ).get(),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
 
-              if (snapshot.connectionState == ConnectionState.done) {
-                Map<String, dynamic> data = snapshot.data.data();
-                MyClient client= MyClient.fromJson(parseString(data['client']));
-                parseString(data['client']);
-                return ViewOptions(client);
-              }
+                    if (snapshot.hasError) {
+                      return Text("Something went wrong");
+                    }
 
-              return LoadingIndicator(
-                indicatorType: Indicator.ballPulse,
-                color: Colors.amber,
-              );
-            },
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      Map<String, dynamic> data = snapshot.data.data();
+                      MyClient client= MyClient.fromJson(parseString(data['client']));
+                      parseString(data['client']);
+                      return ViewOptions(client);
+                    }
+
+                    return LoadingIndicator(
+                      indicatorType: Indicator.ballPulse,
+                      color: Colors.amber,
+                    );
+                  },
+                ),
+              ),
+              Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Consumer<GetClientProvider>(
+                      builder: (context, provider,child) {
+                        if(provider.isOptionsSelected)
+                        return FlatButton(
+                          color: Colors.amber,
+                          onPressed: (){
+                              Navigator.of(context).popAndPushNamed('/');
+                            provider.changeIsOptionsSelected();
+                            },
+                          child: Icon(
+                            LineAwesomeIcons.backward,
+                            color: Colors.white,
+                          ),
+                        );
+                        return SizedBox(
+                          width: 0,
+                          height: 0,
+                        );
+                      }
+                  )),
+            ],
           ),
         ],
       ),

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'history.g.dart';
 
@@ -16,14 +15,15 @@ class UserHistory {
   String sum;
 
   UserHistory(
-      {
-        @required this.hospitalLocation,
-        @required this.hospitalName,
-        @required this.patientInfo,
-        @required this.medicalInfo,
-        @required this.clarification,
-        @required this.iconPath
-      });
+      {this.hospitalLocation,
+        this.hospitalName,
+        this.patientInfo,
+        this.medicalInfo,
+        this.clarification,
+        this.iconPath})
+      :
+
+        this.sum = "${medicalInfo.hospitalServices.last['sum']},000";
 
   factory UserHistory.fromJson(Map<String, dynamic> json) => _$UserHistoryFromJson(json);
   Map<String, dynamic> toJson() => _$UserHistoryToJson(this);
@@ -41,25 +41,24 @@ class MedicalInfo {
   final String condition;
   final int consultationFee;
   final List<Map<String, int>> hospitalServices;
-  final List<Map<String, String>> results;
+  //final List<Map<String, String>> results;
   final List<Map<String, int>> drugsPrescribed;
 
   MedicalInfo(
-      {
-        @required this.drugsPrescribed,
-        @required this.natureOfillness,
-        @required this.diagnosis,
-        @required this.condition,
-        @required this.consultationFee,
-        @required this.hospitalServices,
-        @required this.results
+      {this.drugsPrescribed,
+        this.natureOfillness,
+        this.diagnosis,
+        this.condition,
+        this.consultationFee,
+        this.hospitalServices,
+        //this.results
       });
   factory MedicalInfo.fromJson(Map<String, dynamic> json) => _$MedicalInfoFromJson(json);
   Map<String, dynamic> toJson() => _$MedicalInfoToJson(this);
 
   @override
   String toString() {
-    return 'MedicalInfo{natureOfillness: $natureOfillness, diagnosis: $diagnosis, condition: $condition, consultationFee: $consultationFee, hospitalServices: $hospitalServices, results: $results}';
+    return 'MedicalInfo{natureOfillness: $natureOfillness, diagnosis: $diagnosis, condition: $condition, consultationFee: $consultationFee, hospitalServices: $hospitalServices, drugsPrescribed: $drugsPrescribed}';
   }
 }
 
@@ -95,13 +94,11 @@ class PatientInfo {
   final String dateOfBirth;
 
   PatientInfo(
-      {
-        @required this.patientName,
-        @required this.relationship,
-        @required this.medicalCardNo,
-        @required this.gender,
-        @required this.dateOfBirth
-      });
+      {this.patientName,
+        this.relationship,
+        this.medicalCardNo,
+        this.gender,
+        this.dateOfBirth});
   factory PatientInfo.fromJson(Map<String, dynamic> json) => _$PatientInfoFromJson(json);
   Map<String, dynamic> toJson() => _$PatientInfoToJson(this);
 

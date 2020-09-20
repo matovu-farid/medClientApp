@@ -4,10 +4,10 @@ import 'package:medClientApp/med_client_provider.dart';
 import 'package:medClientApp/models/clients/myclient.dart';
 import 'package:medClientApp/widgets/views/hospital_services.dart';
 import 'package:medClientApp/widgets/views/user_profile_display.dart';
+import 'package:medClientApp/widgets/views/visit_details.dart';
 import 'package:provider/provider.dart';
 
 import 'views/benefits_display.dart';
-import 'views/user_history_display.dart';
 class ViewOptions extends StatelessWidget {
   final MyClient client;
 
@@ -20,7 +20,7 @@ class ViewOptions extends StatelessWidget {
     List<Map<String,String>> options =[
       {'User Info': '/UserInfoDisplay'},
       {'Benefits': '/BenefitsDisplay'},
-      {'User History':'/UserHistory'},
+      {'Visit Details':'/VisitDetails'},
       {'Hospital Services':'/HospitalServices'}
     ];
     return SizedBox(
@@ -32,7 +32,8 @@ class ViewOptions extends StatelessWidget {
           '/UserInfoDisplay':(BuildContext context)=>UserInfoDisplay(client),
           '/BenefitsDisplay':(BuildContext context)=>BenefitsDisplay(client),
           '/VisitDetails':(BuildContext context)=>VisitDetails(client),
-          '/HospitalServices':(BuildContext context)=>HospitalServicesDisplay(client)
+          '/HospitalServices':(BuildContext context)=>HospitalServicesDisplay(client),
+
 
 
         },
@@ -54,6 +55,8 @@ class OptionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: true,
+      //resizeToAvoidBottomInset: false,
       body: Container(
         child: GridView.count(
           crossAxisCount: 2,
