@@ -2,6 +2,7 @@ import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:medClientApp/med_client_provider.dart';
 import 'package:medClientApp/models/clients/myclient.dart';
 import 'package:flutter/material.dart';
+import 'package:medClientApp/widgets/utilities/go_back.dart';
 import 'package:provider/provider.dart';
 
 class UserInfoDisplay extends StatelessWidget{
@@ -14,7 +15,7 @@ class UserInfoDisplay extends StatelessWidget{
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-      floatingActionButton: Consumer<GetClientProvider>(
+      floatingActionButton: Consumer<MedicalClientProvider>(
         builder: (context, provider,child) {
           return FloatingActionButton(
             child: Icon(
@@ -63,7 +64,7 @@ class Heading extends StatelessWidget {
           child: Text(
             text,
             style: TextStyle(
-              fontSize: 16,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
                 color: Colors.white),
 

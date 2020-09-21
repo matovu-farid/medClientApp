@@ -42,9 +42,10 @@ class UserProfile {
   factory UserProfile.fromJson(Map<String, dynamic> json) => _$UserProfileFromJson(json);
   Map<String, dynamic> toJson() => _$UserProfileToJson(this);
 
+
   @override
   String toString() {
-    return 'UserProfile{company: $company, occupation: $occupation, gender: $gender, dateOfBirth: $dateOfBirth, bloodType: $bloodType, email: $email, address: $address}';
+    return 'UserProfile{company: $company, occupation: $occupation, gender: $gender, dateOfBirth: $dateOfBirth, bloodType: $bloodType, email: $email, address: $address, name: $name, likability: $likability, imagePath: $imagePath, imageWidget: $imageWidget, regDate: $regDate, holderStatus: $holderStatus, phoneNumber: $phoneNumber}';
   }
 
   List<Map<String, String>> toList() {

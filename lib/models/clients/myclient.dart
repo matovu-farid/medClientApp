@@ -12,15 +12,15 @@ class MyClient {
   List<UserHistory> historyList;
   String id;
 
-  final Map<String, List<Map<String, dynamic>>> allBenefits;
+  final Map<String, Map<String, dynamic>> allBenefits;
 
   MyClient(
       {this.allBenefits,
-      this.historyList,
-      this.userProfile,
-      this.isGenerated = true,
+        this.historyList,
+        this.userProfile,
+        this.isGenerated = true,
       })
-  :id = Uuid().v4()
+      :id = Uuid().v4()
   ;
   factory MyClient.fromJson(Map<String, dynamic> json) => _$MyClientFromJson(json);
   Map<String, dynamic> toJson() => _$MyClientToJson(this);

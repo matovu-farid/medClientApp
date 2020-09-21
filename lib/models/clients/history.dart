@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'history.g.dart';
 
@@ -42,7 +43,7 @@ class MedicalInfo {
   final int consultationFee;
   final List<Map<String, int>> hospitalServices;
   //final List<Map<String, String>> results;
-  final List<Map<String, int>> drugsPrescribed;
+  final Map<String,int> drugsPrescribed;
 
   MedicalInfo(
       {this.drugsPrescribed,

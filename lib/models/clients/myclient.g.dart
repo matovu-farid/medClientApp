@@ -9,8 +9,7 @@ part of 'myclient.dart';
 MyClient _$MyClientFromJson(Map<String, dynamic> json) {
   return MyClient(
     allBenefits: (json['allBenefits'] as Map<String, dynamic>)?.map(
-      (k, e) => MapEntry(
-          k, (e as List)?.map((e) => e as Map<String, dynamic>)?.toList()),
+      (k, e) => MapEntry(k, e as Map<String, dynamic>),
     ),
     historyList: (json['historyList'] as List)
         ?.map((e) =>

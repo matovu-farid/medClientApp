@@ -39,11 +39,9 @@ Map<String, dynamic> _$UserHistoryToJson(UserHistory instance) =>
 
 MedicalInfo _$MedicalInfoFromJson(Map<String, dynamic> json) {
   return MedicalInfo(
-    drugsPrescribed: (json['drugsPrescribed'] as List)
-        ?.map((e) => (e as Map<String, dynamic>)?.map(
-              (k, e) => MapEntry(k, e as int),
-            ))
-        ?.toList(),
+    drugsPrescribed: (json['drugsPrescribed'] as Map<String, dynamic>)?.map(
+      (k, e) => MapEntry(k, e as int),
+    ),
     natureOfillness: json['natureOfillness'] as String,
     diagnosis: json['diagnosis'] as String,
     condition: json['condition'] as String,

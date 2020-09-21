@@ -21,7 +21,7 @@ class MedClientApp extends StatelessWidget{
       ),
       home: Scaffold(
       appBar: AppBar(title: Center(child: Text("Medcare Client App")),),
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       body: FutureBuilder(
         future:_initialization,
         builder: (context, snapshot) {

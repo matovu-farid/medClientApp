@@ -12,26 +12,25 @@ import 'package:medClientApp/models/clients/myclient.dart';
 import 'package:medClientApp/widgets/view_options.dart';
 import 'package:provider/provider.dart';
 
-//FirebaseFirestore firestore = FirebaseFirestore.instance;
 
 class GetClient extends StatefulWidget {
-
-  //String client;
 
   @override
   _GetClientState createState() => _GetClientState();
 }
 
 class _GetClientState extends State<GetClient> {
-  parseString(String clientJson){
-     return json.decode(clientJson);
-//     print('$client');
+  parseString(String clientJson) {
+    return json.decode(clientJson);
   }
+
   TextEditingController _editingController;
+
   @override
   void initState() {
     super.initState();
-    _editingController = TextEditingController(text:'045ab9b9-3716-4f1e-a1db-d6307ab117dd');
+    _editingController =
+        TextEditingController(text: '08076c2f-6d18-4c38-9a28-83c2dcf45c36');
   }
 
   @override
@@ -74,32 +73,28 @@ class _GetClientState extends State<GetClient> {
   void _cancelAuthentication() {
     auth.stopAuthentication();
   }
+
   @override
   Widget build(BuildContext context) {
-    CollectionReference clients = FirebaseFirestore.instance.collection('clients');
+    CollectionReference clients =
+        FirebaseFirestore.instance.collection('clients');
     GlobalKey<FormState> formKey = GlobalKey<FormState>();
     String fetchedId;
 
-    return ChangeNotifierProvider<GetClientProvider>(
-      create: (context)=>GetClientProvider(),
+    return ChangeNotifierProvider<MedicalClientProvider>(
+      create: (context) => MedicalClientProvider(),
       child: ListView(
         children: [
-
-          Consumer<GetClientProvider>(
-
-            builder: (context, provider,child) {
-              if(!provider.isOptionsSelected)
+          Consumer<MedicalClientProvider>(builder: (context, provider, child) {
+            if (!provider.isOptionsSelected)
               return SizedBox(
                 width: 300,
                 child: Wrap(
                   children: [
-
                     TextFormField(
                       controller: _editingController,
-                      decoration: InputDecoration(
-                        labelText: 'Enter Id'
-                      ),
-                      onChanged: (value){
+                      decoration: InputDecoration(labelText: 'Enter Id'),
+                      onChanged: (value) {
                         _editingController.text = value;
                       },
                     ),
@@ -108,79 +103,47 @@ class _GetClientState extends State<GetClient> {
                       child: FlatButton(
                         color: Colors.amber,
                         onPressed: () {
-                        //  await _authenticate();
+                          //  await _authenticate();
                           OnTap().sink.add(_editingController.text);
                         },
-                      child: Text('Fetch Client',
-                        style:  TextStyle(
-                          color: Colors.white
+                        child: Text(
+                          'Fetch Client',
+                          style: TextStyle(color: Colors.white),
                         ),
-                      ),),
+                      ),
                     ),
-
                   ],
                 ),
               );
-              return SizedBox(
-                width: 0,
-                height: 0,
-              );
+            return SizedBox(
+              width: 0,
+              height: 0,
+            );
+          }),
+          Align(
+            alignment: Alignment.center,
+            child: FutureBuilder<DocumentSnapshot>(
+              future: clients.doc('${_editingController.text}').get(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<DocumentSnapshot> snapshot) {
+                if (snapshot.hasError) {
+                  return Text("Something went wrong");
+                }
 
-            }
-          ),
+                if (snapshot.connectionState == ConnectionState.done) {
+                  Map<String, dynamic> data = snapshot.data.data();
+                  MyClient client =
+                      MyClient.fromJson(parseString(data['client']));
+                  parseString(data['client']);
+                  return ViewOptions(client);
+                }
 
-          Stack(
-            children: [
-
-              Align(
-                alignment: Alignment.center,
-                child: FutureBuilder<DocumentSnapshot>(
-                  future: clients.doc(
-                      '${_editingController.text}' ).get(),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-
-                    if (snapshot.hasError) {
-                      return Text("Something went wrong");
-                    }
-
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      Map<String, dynamic> data = snapshot.data.data();
-                      MyClient client= MyClient.fromJson(parseString(data['client']));
-                      parseString(data['client']);
-                      return ViewOptions(client);
-                    }
-
-                    return LoadingIndicator(
-                      indicatorType: Indicator.ballPulse,
-                      color: Colors.amber,
-                    );
-                  },
-                ),
-              ),
-              Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Consumer<GetClientProvider>(
-                      builder: (context, provider,child) {
-                        if(provider.isOptionsSelected)
-                        return FlatButton(
-                          color: Colors.amber,
-                          onPressed: (){
-                              Navigator.of(context).popAndPushNamed('/');
-                            provider.changeIsOptionsSelected();
-                            },
-                          child: Icon(
-                            LineAwesomeIcons.backward,
-                            color: Colors.white,
-                          ),
-                        );
-                        return SizedBox(
-                          width: 0,
-                          height: 0,
-                        );
-                      }
-                  )),
-            ],
+                return LoadingIndicator(
+                  indicatorType: Indicator.ballPulse,
+                  color: Colors.amber,
+                );
+              },
+            ),
           ),
         ],
       ),
@@ -188,8 +151,10 @@ class _GetClientState extends State<GetClient> {
   }
 }
 
-class OnTap{
+class OnTap {
   StreamController<String> controller = StreamController<String>();
+
   StreamSink<String> get sink => controller.sink;
+
   Stream<String> get stream => controller.stream;
 }
