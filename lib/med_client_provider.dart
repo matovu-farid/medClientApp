@@ -3,6 +3,8 @@ import 'package:medClientApp/models/clients/history.dart';
 import 'package:medClientApp/models/clients/myclient.dart';
 
 class MedicalClientProvider extends ChangeNotifier{
+  //TODO: save the medicalInfo of the client and theerefore save their visit history
+  //TODO: send the client back to the database and check whether the history is fixed
   MyClient _client;
   final medicalInfoDetails = {
     'Nature of illness':'',

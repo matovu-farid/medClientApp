@@ -20,7 +20,7 @@ class VisitDetails extends StatelessWidget {
   VisitDetails(this.client);
 
   final _formKey = GlobalKey<FormState>();
-
+//TODO: add a method to automatically add a table field
   List<TableRow> tableRowList = [TableRow(
     children: [
       TableCell(child: Text('Drugs')),

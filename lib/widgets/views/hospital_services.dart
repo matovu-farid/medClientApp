@@ -12,6 +12,7 @@ import 'package:medClientApp/widgets/utilities/submit_button.dart';
 import 'package:medClientApp/widgets/views/user_profile_display.dart';
 import 'package:provider/provider.dart';
 
+//TODO: add hospital Services to the overall medicasl Info of the client
 class HospitalServicesDisplay extends StatefulWidget {
   final MyClient client;
 
