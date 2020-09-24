@@ -28,10 +28,9 @@ class _HospitalServicesDisplayState extends State<HospitalServicesDisplay> {
       widget.client.allBenefits;
 
     List<Map<String, dynamic>> get inPatientCollectionFunc =>
-
   benefitsCollection[benefitsCollection.keys.first].entries.map((e) => {
     e.key: 0,
-    'limit': benefitsCollection[e.key],
+    'limit': benefitsCollection[benefitsCollection.keys.first][e.key],
     'isChecked': false
   }).toList();
   List<Map<String, dynamic>> inPatientCollection;
@@ -41,7 +40,7 @@ class _HospitalServicesDisplayState extends State<HospitalServicesDisplay> {
   List<Map<String, dynamic>> get outPatientCollectionFunc =>
       benefitsCollection[benefitsCollection.keys.last].entries.map((e) => {
         e.key: 0,
-        'limit': benefitsCollection[e.key],
+        'limit': benefitsCollection[benefitsCollection.keys.last][e.key],
         'isChecked': false
       }).toList();
 
@@ -61,6 +60,7 @@ class _HospitalServicesDisplayState extends State<HospitalServicesDisplay> {
 
   submit() {
     formKey.currentState.validate();
+    if(formKey.currentState.validate())
     formKey.currentState.save();
   }
 
@@ -91,6 +91,7 @@ class _HospitalServicesDisplayState extends State<HospitalServicesDisplay> {
                                     onChanged: (bool value) {
                                       setState(() {
                                         benefitMap['isChecked'] = value;
+                                        print('$benefitMap');
                                       });
                                     },
                                   ),

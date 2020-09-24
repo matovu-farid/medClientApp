@@ -1,38 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:medClientApp/models/clients/history.dart';
+import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:medClientApp/models/clients/myclient.dart';
 import 'package:medClientApp/widgets/utilities/go_back.dart';
 import 'package:medClientApp/widgets/utilities/submit_button.dart';
 import 'package:provider/provider.dart';
+import 'package:regexpattern/regexpattern.dart';
 
 import '../../med_client_provider.dart';
 
 class VisitDetails extends StatelessWidget {
   final MyClient client;
 
-//  final medicalInfoDetails = {
-//    'Nature of illness':'',
-//    'Diagnosis':'',
-//    'Consultation Fee':'',
-//    'Drugs Prescribed':''
-//  };
   VisitDetails(this.client);
 
   final _formKey = GlobalKey<FormState>();
-//TODO: add a method to automatically add a table field
-  List<TableRow> tableRowList = [TableRow(
-    children: [
-      TableCell(child: Text('Drugs')),
-      TableCell(child: Text('Total Cost'))
-    ],
-  ),
-    TableRow(
-      children: [
-        TableCell(child: RegInputField(isOptional: true,)),
-        TableCell(child: RegInputField(isOptional: true,))
-      ],
-    )];
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +29,24 @@ class VisitDetails extends StatelessWidget {
                 children: [
                   ...provider.medicalInfoDetails.entries.map((e) {
                     if (e.key == 'Drugs Prescribed') {
-                      return Table(
-                        children: tableRowList,
+                      return Column(
+                        children: [
+                          Text(
+                            'Fill in  all drugs prescribed and the cost',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Table(
+                            children: provider.tableRowList,
+                          ),
+                          FloatingActionButton(
+                            onPressed: provider.addRow,
+                            backgroundColor: Colors.green,
+                            child: Icon(
+                              LineAwesomeIcons.plus,
+                              color: Colors.white,
+                            ),
+                          )
+                        ],
                       );
                     }
 
@@ -56,6 +54,7 @@ class VisitDetails extends StatelessWidget {
                       return RegInputField(
                         initialValue: e.value.toString(),
                         labelText: e.key,
+                        isNumeric:true,
                         keyboardType: TextInputType.number,
                         onSaved: (String value) {
                           provider.medicalInfoDetails[e.key] = int.parse(value);
@@ -108,11 +107,13 @@ class RegInputField extends StatelessWidget {
   final String initialValue;
   final TextInputType keyboardType;
   final bool isOptional;
+  final bool isNumeric;
 
   RegInputField(
       {
+        this.isNumeric = false,
         this.isOptional = false,
-        this.labelText,
+      this.labelText,
       this.onChanged,
       this.description,
       this.isCollapsed = false,
@@ -131,10 +132,26 @@ class RegInputField extends StatelessWidget {
         keyboardType: keyboardType,
         onSaved: onSaved,
         onChanged: onChanged,
-        validator: isOptional? (value)=>null: (value) {
-          if (value == null) return 'This field is required';
-          return null;
-        },
+        validator: isOptional
+            ? (value) {
+          if(!value.isNumeric() && value.isNotEmpty && isNumeric){
+            return 'This input should be a contain only numbers although optional';
+          }
+                return null;
+              }
+            : (value) {
+                //TODO: Fix validation
+          if(value.isEmpty){
+            return 'This value is required';
+          }
+          if(isNumeric && !value.isNumeric()){
+            return 'The value should only contain numbers';
+
+          }
+
+            return null;
+
+              },
         decoration: InputDecoration(
             border: OutlineInputBorder(gapPadding: 6),
             labelText: labelText,
