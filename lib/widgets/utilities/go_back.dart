@@ -5,9 +5,11 @@ import 'package:provider/provider.dart';
 
 class GoBackButton extends StatelessWidget {
  final AlignmentGeometry alignment;
+ final IconData iconData;
    GoBackButton({
     Key key,
-     this.alignment = Alignment.centerLeft
+     this.alignment = Alignment.centerLeft,
+     this.iconData = LineAwesomeIcons.backward
   }) : super(key: key);
 
   @override
@@ -24,7 +26,7 @@ class GoBackButton extends StatelessWidget {
 
             },
             child: Icon(
-              LineAwesomeIcons.backward,
+              iconData,
               color: Colors.white,
             ),
           ),

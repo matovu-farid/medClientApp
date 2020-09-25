@@ -47,9 +47,7 @@ MedicalInfo _$MedicalInfoFromJson(Map<String, dynamic> json) {
     condition: json['condition'] as String,
     consultationFee: json['consultationFee'] as int,
     hospitalServices: (json['hospitalServices'] as List)
-        ?.map((e) => (e as Map<String, dynamic>)?.map(
-              (k, e) => MapEntry(k, e as int),
-            ))
+        ?.map((e) => e as Map<String, dynamic>)
         ?.toList(),
   );
 }

@@ -15,8 +15,9 @@ import 'package:provider/provider.dart';
 //TODO: add hospital Services to the overall medicasl Info of the client
 class HospitalServicesDisplay extends StatefulWidget {
   final MyClient client;
+  final MedicalClientProvider provider;
 
-  HospitalServicesDisplay(this.client);
+  HospitalServicesDisplay(this.client, this.provider);
 
   @override
   _HospitalServicesDisplayState createState() =>
@@ -27,22 +28,29 @@ class _HospitalServicesDisplayState extends State<HospitalServicesDisplay> {
   Map<String, Map<String, dynamic>> get benefitsCollection =>
       widget.client.allBenefits;
 
-    List<Map<String, dynamic>> get inPatientCollectionFunc =>
-  benefitsCollection[benefitsCollection.keys.first].entries.map((e) => {
-    e.key: 0,
-    'limit': benefitsCollection[benefitsCollection.keys.first][e.key],
-    'isChecked': false
-  }).toList();
+  List<Map<String, dynamic>> get inPatientCollectionFunc =>
+      benefitsCollection[benefitsCollection.keys.first]
+          .entries
+          .map((e) => {
+                e.key: 0,
+                'limit': benefitsCollection[benefitsCollection.keys.first]
+                    [e.key],
+                'isChecked': false
+              })
+          .toList();
   List<Map<String, dynamic>> inPatientCollection;
 
   List<Map<String, dynamic>> outPatientCollection;
 
   List<Map<String, dynamic>> get outPatientCollectionFunc =>
-      benefitsCollection[benefitsCollection.keys.last].entries.map((e) => {
-        e.key: 0,
-        'limit': benefitsCollection[benefitsCollection.keys.last][e.key],
-        'isChecked': false
-      }).toList();
+      benefitsCollection[benefitsCollection.keys.last]
+          .entries
+          .map((e) => {
+                e.key: 0,
+                'limit': benefitsCollection[benefitsCollection.keys.last][e.key],
+                'isChecked': false
+              })
+          .toList();
 
   @override
   void initState() {
@@ -59,9 +67,20 @@ class _HospitalServicesDisplayState extends State<HospitalServicesDisplay> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   submit() {
-    formKey.currentState.validate();
-    if(formKey.currentState.validate())
-    formKey.currentState.save();
+    if (formKey.currentState.validate()) {
+      formKey.currentState.save();
+      widget.provider.medicalInfoDetails['hospital services'] = [
+        ...inPatientCollection
+            .where((element) => element['isChecked'] == true)
+            .map((e) => {e.keys.first: e[e.keys.first]})
+            .toList(),
+        ...outPatientCollection
+            .where((element) => element['isChecked'] == true)
+            .map((e) => {e.keys.first: e[e.keys.first]})
+            .toList()
+      ];
+    }
+    widget.provider.setMedicalInfo();
   }
 
   String hospitalSelected;
@@ -91,7 +110,6 @@ class _HospitalServicesDisplayState extends State<HospitalServicesDisplay> {
                                     onChanged: (bool value) {
                                       setState(() {
                                         benefitMap['isChecked'] = value;
-                                        print('$benefitMap');
                                       });
                                     },
                                   ),
@@ -100,9 +118,15 @@ class _HospitalServicesDisplayState extends State<HospitalServicesDisplay> {
                                       limit: benefitMap['limit'],
                                       text: 'lim : ${benefitMap['limit']} ',
                                       onSaved: (textGot) {
-                                        benefitMap[benefitMap.keys.first] =
-                                            textGot;
+                                         var key = benefitMap.keys.first;
+                                         //var value = benefitMap[key];
+                                         benefitMap[key] = int.parse(textGot);
                                       },
+//                                      onChanged: (textGot) {
+//                                        var key = benefitMap.keys.first;
+//                                        //var value = benefitMap[key];
+//                                        benefitMap[key] = int.parse(textGot);
+//                                      },
                                     ),
                                 ],
                               ),
@@ -127,10 +151,9 @@ class _HospitalServicesDisplayState extends State<HospitalServicesDisplay> {
                                       limit: benefitMap['limit'],
                                       text: 'lim : ${benefitMap['limit']} ',
                                       onSaved: (textGot) {
-                                        benefitMap[benefitMap.keys.first] =
-                                            textGot;
-
-                                        //benefitMap.add({'service': textGot});
+                                        var key = benefitMap.keys.first;
+//                                        var value = benefitMap[key];
+                                        benefitMap[key] = int.parse(textGot);
                                       },
                                     ),
                                 ],
@@ -149,7 +172,6 @@ class _HospitalServicesDisplayState extends State<HospitalServicesDisplay> {
     );
   }
 }
-
 
 class MyDropDown extends StatelessWidget {
   final List<String> dropdownNames;
@@ -176,7 +198,6 @@ class MyDropDown extends StatelessWidget {
           )),
     ];
     return Wrap(
-//      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         if (text != null) Heading('${text} : '),
         DropdownButton<String>(

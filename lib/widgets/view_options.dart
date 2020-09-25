@@ -3,6 +3,7 @@ import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:medClientApp/med_client_provider.dart';
 import 'package:medClientApp/models/clients/myclient.dart';
 import 'package:medClientApp/widgets/views/hospital_services.dart';
+import 'package:medClientApp/widgets/views/settings_display.dart';
 import 'package:medClientApp/widgets/views/user_profile_display.dart';
 import 'package:medClientApp/widgets/views/visit_details.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +13,7 @@ class ViewOptions extends StatelessWidget {
   final MyClient _client;
 
   ViewOptions(this._client);
+  GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
 
 
@@ -21,24 +23,30 @@ class ViewOptions extends StatelessWidget {
      'User Info': '/UserInfoDisplay',
      'Benefits': '/BenefitsDisplay',
      'Visit Details':'/VisitDetails',
-     'Hospital Services':'/HospitalServices'
+//     'Hospital Services':'/HospitalServices'
+   'Settings':'/SettingsDisplay'
    };
     return SizedBox(
       height: MediaQuery.of(context).size.height*0.7,
       width: MediaQuery.of(context).size.width,
-      child: MaterialApp(
-        routes: {
-          '/': (BuildContext context)=>OptionsScreen(options: options),
-          '/UserInfoDisplay':(BuildContext context)=>UserInfoDisplay(_client),
-          '/BenefitsDisplay':(BuildContext context)=>BenefitsDisplay(_client),
-          '/VisitDetails':(BuildContext context)=>VisitDetails(_client),
-          '/HospitalServices':(BuildContext context)=>HospitalServicesDisplay(_client),
+      child: Consumer<MedicalClientProvider>(
+        builder: (context, provider,child) {
+          return Form(
+            key: _formkey,
+            child: MaterialApp(
+              routes: {
+                '/': (BuildContext context)=>OptionsScreen(options: options),
+                '/UserInfoDisplay':(BuildContext context)=>UserInfoDisplay(_client),
+                '/BenefitsDisplay':(BuildContext context)=>BenefitsDisplay(_client),
+                '/VisitDetails':(BuildContext context)=>VisitDetails(_client,provider),
+                '/HospitalServices':(BuildContext context)=>HospitalServicesDisplay(_client,provider),
+                '/SettingsDisplay': (BuildContext context)=>SettingsDisplay()
+              },
 
 
-
-        },
-
-
+            ),
+          );
+        }
       ),
     );
   }
@@ -113,3 +121,4 @@ class OptionsScreen extends StatelessWidget {
     );
   }
 }
+

@@ -9,7 +9,14 @@ class MedicalClientProvider extends ChangeNotifier{
   //TODO: save the medicalInfo of the client and theerefore save their visit history
   //TODO: send the client back to the database and check whether the history is fixed
   MyClient _client;
-  MedicalInfo medicalInfo;
+  MedicalInfo medicalInfo = MedicalInfo(
+      drugsPrescribed: {},
+      natureOfillness: '' ,
+      diagnosis: '',
+      condition: '',
+      consultationFee: 0,
+      hospitalServices: []
+  );
   bool isOptionsSelected = false;
   bool isMedicalInfoFilled = false;
   final medicalInfoDetails = {
@@ -17,29 +24,14 @@ class MedicalClientProvider extends ChangeNotifier{
     'Diagnosis':'',
     'Condition':'',
     'Consultation Fee':'',
-    'Drugs Prescribed':{}
+    'Drugs Prescribed':{},
+    'hospital services': List<Map<String,dynamic>>()
   };
-  List<TableRow> tableRowList = [
-    TableRow(
-    children: [
-      TableCell(child: Heading('Drugs')),
-      TableCell(child: Heading('Total Cost'))
-    ],
-  ),
-    TableRow(
-      children: [
-        TableCell(child: RegInputField(isOptional: true,)),
-        TableCell(child: RegInputField(isOptional: true,
-          keyboardType: TextInputType.number,))
-      ],
-    )];
-  void addRow(){
-    this.tableRowList.add(TableRow(
-      children: [
-        TableCell(child: RegInputField(isOptional: true,)),
-        TableCell(child: RegInputField(isOptional: true,keyboardType: TextInputType.number))
-      ],
-    ));
+
+
+  List<DrugsRow> drugList = [];
+  addToDrugList(){
+    drugList.add(DrugsRow(provider: this,));
     notifyListeners();
   }
 
@@ -53,15 +45,27 @@ MyClient get client =>_client;
     notifyListeners();
   }
 
+  UserHistory history = UserHistory(
+      hospitalLocation: null,
+      hospitalName: null,
+      patientInfo: null,
+      //medicalInfo: null,
+      clarification: null);
+
   //should only be set after checking that the parameters are set
   setMedicalInfo (){
-  medicalInfo = MedicalInfo(
-      drugsPrescribed: medicalInfoDetails['Drugs Prescribed'],
-      natureOfillness: medicalInfoDetails['Nature of illness'] ,
-      diagnosis: medicalInfoDetails['Diagnosis'],
-      condition: medicalInfoDetails['Condition'],
-      consultationFee: medicalInfoDetails['Consultation Fee'],
-      hospitalServices: null);
+
+    medicalInfo
+      ..natureOfillness= medicalInfoDetails['Nature of illness']
+      ..diagnosis= medicalInfoDetails['Diagnosis']
+      ..condition= medicalInfoDetails['Condition']
+      ..consultationFee = medicalInfoDetails['Consultation Fee']
+      ..hospitalServices = medicalInfoDetails['hospital services'];
+    history.medicalInfo=medicalInfo;
+
+  print('$medicalInfo');
+
+
 
   }
   checkIfMedicalInfoFilled(){
@@ -72,4 +76,59 @@ MyClient get client =>_client;
 
   }
 
+}
+
+//class DrugCollection{
+//  List<DrugsRow> drugList = [];
+//
+//}
+
+class DrugsRow extends StatelessWidget {
+  final MedicalClientProvider provider;
+  Map<String,int> drugMap = {};
+  String drugName;
+  int drugCost;
+
+
+  DrugsRow({this.provider});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: 100,
+        child: Row(
+          children: [
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.5,
+              child: RegInputField(
+                isOptional: true,
+                isCollapsed: false,
+                // onSaved: (drugName) {},
+                onChanged: (drugName) {
+                  this.drugName = drugName;
+                },
+              ),
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.5,
+              child: RegInputField(
+                isOptional: true,
+                isCollapsed: false,
+                keyboardType: TextInputType.number,
+                onSaved: (cost) {
+                  drugMap[drugName] = drugCost;
+//                  var drugsPrescribed= provider.medicalInfoDetails['Drugs Prescribed'];
+                  provider.medicalInfo.drugsPrescribed.addEntries([MapEntry(drugName, drugCost)]);
+//                  drugsPrescribed.addEntries([MapEntry(drugName, drugCost)]);
+
+                },
+                onChanged: (drugCost){
+                  this.drugCost = int.parse(drugCost);
+                },
+              ),
+            )
+          ],
+        ));
+  }
 }

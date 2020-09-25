@@ -7,7 +7,7 @@ part 'history.g.dart';
 @JsonSerializable()
 class UserHistory {
   final PatientInfo patientInfo;
-  final MedicalInfo medicalInfo;
+   MedicalInfo medicalInfo;
   final Clarification clarification;
   final String iconPath;
   final String hospitalName;
@@ -16,11 +16,12 @@ class UserHistory {
   String sum;
 
   UserHistory(
-      {this.hospitalLocation,
-        this.hospitalName,
-        this.patientInfo,
-        this.medicalInfo,
-        this.clarification,
+      {
+        @required this.hospitalLocation,
+        @required this.hospitalName,
+        @required this.patientInfo,
+        @required this.medicalInfo,
+        @required this.clarification,
         this.iconPath})
       :
 
@@ -37,13 +38,13 @@ class UserHistory {
 
 @JsonSerializable()
 class MedicalInfo {
-  final String natureOfillness;
-  final String diagnosis;
-  final String condition;
-  final int consultationFee;
-  final List<Map<String, int>> hospitalServices;
+   String natureOfillness;
+   String diagnosis;
+   String condition;
+   int consultationFee;
+  List<Map<String,dynamic>> hospitalServices;
   //final List<Map<String, String>> results;
-  final Map<String,int> drugsPrescribed;
+   Map<String,int> drugsPrescribed;
 
   MedicalInfo(
       {this.drugsPrescribed,
