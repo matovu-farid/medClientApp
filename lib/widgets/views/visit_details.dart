@@ -119,9 +119,14 @@ class RegInputField extends StatelessWidget {
   final TextInputType keyboardType;
   final bool isOptional;
   final bool isNumeric;
+  final bool obscureText;
+  final Widget trailing;
 
   RegInputField(
-      {this.isNumeric = false,
+      {
+        this.trailing = const SizedBox(width: 0,height: 0,),
+        this.obscureText = false,
+        this.isNumeric = false,
       this.isOptional = false,
       this.labelText,
       this.onChanged,
@@ -138,7 +143,7 @@ class RegInputField extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: TextFormField(
         initialValue: initialValue,
-        //autofocus: true,
+        obscureText: obscureText,
         keyboardType: keyboardType,
         onSaved: onSaved,
         onChanged: onChanged,
@@ -161,6 +166,7 @@ class RegInputField extends StatelessWidget {
                 return null;
               },
         decoration: InputDecoration(
+          suffixIcon: trailing,
             border: OutlineInputBorder(gapPadding: 6),
             labelText: labelText,
             labelStyle: TextStyle(color: Colors.black)),

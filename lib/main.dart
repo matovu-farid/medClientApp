@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:medClientApp/retrieve_client.dart';
 
+import 'models/clients/hospitaluser.dart';
+
 main(List<String> args){
   runApp(MedClientApp());
 }
@@ -14,6 +16,7 @@ class MedClientApp extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+
     return MaterialApp(
 
       theme: ThemeData(

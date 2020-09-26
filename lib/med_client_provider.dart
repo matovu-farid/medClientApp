@@ -9,6 +9,7 @@ class MedicalClientProvider extends ChangeNotifier{
   //TODO: save the medicalInfo of the client and theerefore save their visit history
   //TODO: send the client back to the database and check whether the history is fixed
   MyClient _client;
+  bool obscurePassword = true;
   MedicalInfo medicalInfo = MedicalInfo(
       drugsPrescribed: {},
       natureOfillness: '' ,
@@ -27,8 +28,10 @@ class MedicalClientProvider extends ChangeNotifier{
     'Drugs Prescribed':{},
     'hospital services': List<Map<String,dynamic>>()
   };
-
-
+  changeObscurePassword(){
+    this.obscurePassword = !obscurePassword;
+    notifyListeners();
+  }
   List<DrugsRow> drugList = [];
   addToDrugList(){
     drugList.add(DrugsRow(provider: this,));
@@ -45,13 +48,6 @@ MyClient get client =>_client;
     notifyListeners();
   }
 
-  UserHistory history = UserHistory(
-      hospitalLocation: null,
-      hospitalName: null,
-      patientInfo: null,
-      //medicalInfo: null,
-      clarification: null);
-
   //should only be set after checking that the parameters are set
   setMedicalInfo (){
 
@@ -61,7 +57,6 @@ MyClient get client =>_client;
       ..condition= medicalInfoDetails['Condition']
       ..consultationFee = medicalInfoDetails['Consultation Fee']
       ..hospitalServices = medicalInfoDetails['hospital services'];
-    history.medicalInfo=medicalInfo;
 
   print('$medicalInfo');
 
