@@ -20,20 +20,22 @@ class SettingsDisplay extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    SendHospitalUser().sendToFireBase();
+    //SendHospitalUser().sendToFireBase();
     return Stack(
       children: [
         Scaffold(
           body: ListView(
             children: [
-              Heading('Hospital Name'),
+              SettingsHeading(text:'Hospital Name'),
               RegInputField(
                 initialValue: '${hospitalUser.hospitalName}',
+                isCollapsed: true,
               ),
-              Heading('Password'),
+              SettingsHeading(text:'Password'),
               Consumer<MedicalClientProvider>(
                 builder: (context, provider,child) {
                   return RegInputField(
+                    isCollapsed: true,
                     obscureText: provider.obscurePassword,
                       trailing: IconButton(
                         icon: Icon(LineAwesomeIcons.eye),
@@ -45,6 +47,11 @@ class SettingsDisplay extends StatelessWidget{
                 }
               ),
               //Text('${hospitalUser.hospitalName}'),
+              FlatButton(
+                color: Colors.amber,
+                  onPressed: (){
+
+              }, child: Text('Login',style: TextStyle(color: Colors.white),))
 
             ],
           ),
@@ -56,4 +63,23 @@ class SettingsDisplay extends StatelessWidget{
     );
   }
 
+}
+
+class SettingsHeading extends StatelessWidget {
+  final String text;
+   SettingsHeading({
+   @required this.text
+
+  }) ;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(text,
+        style: TextStyle(
+          fontWeight: FontWeight.bold
+        ),
+      ),
+    );
+  }
 }

@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.medClientApp">
+    <uses-permission android:name ="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
@@ -34,6 +35,9 @@
               android:name="io.flutter.embedding.android.SplashScreenDrawable"
               android:resource="@drawable/launch_background"
               />
+            <meta-data
+                    android:name="com.google.firebase.ml.vision.DEPENDENCIES"
+                    android:value="ocr" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

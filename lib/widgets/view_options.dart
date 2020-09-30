@@ -40,7 +40,8 @@ class ViewOptions extends StatelessWidget {
                 '/BenefitsDisplay':(BuildContext context)=>BenefitsDisplay(_client),
                 '/VisitDetails':(BuildContext context)=>VisitDetails(_client,provider),
                 '/HospitalServices':(BuildContext context)=>HospitalServicesDisplay(_client,provider),
-                '/SettingsDisplay': (BuildContext context)=>SettingsDisplay()
+                '/SettingsDisplay': (BuildContext context)=>SettingsDisplay(),
+                '/BarcodeScanner': (BuildContext context)=>SettingsDisplay()
               },
 
 
@@ -63,8 +64,8 @@ class OptionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //resizeToAvoidBottomPadding: true,
-      //resizeToAvoidBottomInset: false,
+//      resizeToAvoidBottomPadding: true,
+//      resizeToAvoidBottomInset: true,
       body: GridView.count(
         physics: ClampingScrollPhysics(),
         crossAxisCount: 2,

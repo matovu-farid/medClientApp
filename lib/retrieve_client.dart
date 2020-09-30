@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
-
+import 'dart:io';
+import 'package:barcode_flutter/barcode_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:loading_indicator/loading_indicator.dart';
-import 'package:local_auth/local_auth.dart';
+import 'package:medClientApp/barcode_files/firebase_ml.dart';
 import 'package:medClientApp/med_client_provider.dart';
 import 'package:medClientApp/models/clients/myclient.dart';
 import 'package:medClientApp/widgets/view_options.dart';
@@ -20,6 +20,9 @@ class GetClient extends StatefulWidget {
 }
 
 class _GetClientState extends State<GetClient> {
+  String scannedBarcode = '';
+
+
   parseString(String clientJson) {
     return json.decode(clientJson);
   }
@@ -39,40 +42,6 @@ class _GetClientState extends State<GetClient> {
     super.dispose();
   }
 
-  final LocalAuthentication auth = LocalAuthentication();
-
-  String _authorized = 'Not Authorized';
-  bool _isAuthenticating = false;
-
-  Future<void> _authenticate() async {
-    bool authenticated = false;
-    try {
-      setState(() {
-        _isAuthenticating = true;
-        _authorized = 'Authenticating';
-      });
-      authenticated = await auth.authenticateWithBiometrics(
-          localizedReason: 'Scan your fingerprint to authenticate',
-          useErrorDialogs: false,
-          stickyAuth: true);
-      setState(() {
-        _isAuthenticating = false;
-        _authorized = 'Authenticating';
-      });
-    } on PlatformException catch (e) {
-      print(e);
-    }
-    if (!mounted) return;
-
-    final String message = authenticated ? 'Authorized' : 'Not Authorized';
-    setState(() {
-      _authorized = message;
-    });
-  }
-
-  void _cancelAuthentication() {
-    auth.stopAuthentication();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,19 +67,88 @@ class _GetClientState extends State<GetClient> {
                         _editingController.text = value;
                       },
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: FlatButton(
-                        color: Colors.amber,
-                        onPressed: () {
-                          //  await _authenticate();
-                          OnTap().sink.add(_editingController.text);
-                        },
-                        child: Text(
-                          'Fetch Client',
-                          style: TextStyle(color: Colors.white),
+                    Text(scannedBarcode),
+                    Wrap(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: FlatButton(
+                            color: Colors.amber,
+                            onPressed: () {
+                              //  await _authenticate();
+                              OnTap().sink.add(_editingController.text);
+                            },
+                            child: Text(
+                              'Fetch Client',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
                         ),
-                      ),
+                        Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: FlatButton(
+                            color: Colors.amber,
+                            onPressed: () async{
+                              //  await _authenticate();
+                              //scannedBarcode= await BarcodeScanner.scan();
+//                              setState(() {
+//
+//                              });
+                             String result = await BarcodeDetectorMachine().detectBarcodes();
+                            Scaffold.of(context).showSnackBar(SnackBar(content: Text(result)));
+
+                            },
+                            child: Text(
+                              'Scan Barcode',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: FlatButton(
+                            color: Colors.amber,
+                            onPressed: () async{
+//
+//
+                              showDialog<void>(
+                                context: context,
+                                barrierDismissible: true,
+                                // false = user must tap button, true = tap outside dialog
+                                builder: (BuildContext dialogContext) {
+                                  return AlertDialog(
+                                    title: Text('title'),
+                                    content:BarCodeImage(
+                                      params: Code39BarCodeParams(
+                                        "1234ABCD",
+                                        lineWidth: 2.0,                // width for a single black/white bar (default: 2.0)
+                                        barHeight: 90.0,               // height for the entire widget (default: 100.0)
+                                        withText: true,                // Render with text label or not (default: false)
+                                      ),
+                                      onError: (error) {               // Error handler
+                                        print('error = $error');
+                                      },
+                                    ),
+                                    actions: <Widget>[
+                                      FlatButton(
+                                        child: Text('cancel'),
+                                        onPressed: () {
+                                          Navigator.of(dialogContext)
+                                              .pop(); // Dismiss alert dialog
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                            child: Text(
+                              'Build Barcode',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

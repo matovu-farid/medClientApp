@@ -6,41 +6,42 @@ import 'package:medClientApp/retrieve_client.dart';
 
 import 'models/clients/hospitaluser.dart';
 
-main(List<String> args){
+main(List<String> args) {
   runApp(MedClientApp());
 }
 
-class MedClientApp extends StatelessWidget{
-
-
+class MedClientApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
     return MaterialApp(
-
       theme: ThemeData(
         primaryColor: Colors.green,
       ),
       home: Scaffold(
-      appBar: AppBar(title: Center(child: Text("Medcare Client App")),),
-      resizeToAvoidBottomInset: true,
-      body: FutureBuilder(
-        future:_initialization,
-        builder: (context, snapshot) {
-          if(snapshot.hasError){
-            return Text('Something went wrong with the database');
-          }
-          if(snapshot.connectionState==ConnectionState.done){
-            return GetClient();
-          }
-          return LoadingIndicator(
-            indicatorType: Indicator.ballPulse,
-            color: Colors.amber,
-          );
-        }
-      ),
-    ),);
-  }
+        //resizeToAvoidBottomPadding: true,
+        resizeToAvoidBottomInset: true,
 
+        appBar: AppBar(
+          title: Center(child: Text("Medcare Client App")),
+        ),
+
+        body: FutureBuilder(
+            future: _initialization,
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Text('Something went wrong with the database');
+              }
+              if (snapshot.connectionState == ConnectionState.done) {
+                return GetClient();
+              }
+              return LoadingIndicator(
+                indicatorType: Indicator.ballPulse,
+                color: Colors.amber,
+              );
+            }),
+      ),
+    );
+  }
 }
