@@ -94,9 +94,39 @@ class _GetClientState extends State<GetClient> {
 //                              setState(() {
 //
 //                              });
-                             String result = await BarcodeDetectorMachine().detectBarcodes();
-                            Scaffold.of(context).showSnackBar(SnackBar(content: Text(result)));
+                             Map map = await BarcodeDetectorMachine().detectBarcodes();
+                            //Scaffold.of(context).showSnackBar(SnackBar(content: Text(map['result'])));
 
+                             showDialog<void>(
+                               context: context,
+                               barrierDismissible: true,
+                               // false = user must tap button, true = tap outside dialog
+                               builder: (BuildContext dialogContext) {
+                                 return AlertDialog(
+                                   title: Text('title'),
+                                   content:BarCodeImage(
+                                     params: Code39BarCodeParams(
+                                       map['display value'],
+                                       lineWidth: 1.0,                // width for a single black/white bar (default: 2.0)
+                                       barHeight: 60,               // height for the entire widget (default: 100.0)
+                                       withText: true,                // Render with text label or not (default: false)
+                                     ),
+                                     onError: (error) {               // Error handler
+                                       print('error = $error');
+                                     },
+                                   ),
+                                   actions: <Widget>[
+                                     FlatButton(
+                                       child: Text('cancel'),
+                                       onPressed: () {
+                                         Navigator.of(dialogContext)
+                                             .pop(); // Dismiss alert dialog
+                                       },
+                                     ),
+                                   ],
+                                 );
+                               },
+                             );
                             },
                             child: Text(
                               'Scan Barcode',
@@ -104,50 +134,7 @@ class _GetClientState extends State<GetClient> {
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(2.0),
-                          child: FlatButton(
-                            color: Colors.amber,
-                            onPressed: () async{
-//
-//
-                              showDialog<void>(
-                                context: context,
-                                barrierDismissible: true,
-                                // false = user must tap button, true = tap outside dialog
-                                builder: (BuildContext dialogContext) {
-                                  return AlertDialog(
-                                    title: Text('title'),
-                                    content:BarCodeImage(
-                                      params: Code39BarCodeParams(
-                                        "1234ABCD",
-                                        lineWidth: 2.0,                // width for a single black/white bar (default: 2.0)
-                                        barHeight: 90.0,               // height for the entire widget (default: 100.0)
-                                        withText: true,                // Render with text label or not (default: false)
-                                      ),
-                                      onError: (error) {               // Error handler
-                                        print('error = $error');
-                                      },
-                                    ),
-                                    actions: <Widget>[
-                                      FlatButton(
-                                        child: Text('cancel'),
-                                        onPressed: () {
-                                          Navigator.of(dialogContext)
-                                              .pop(); // Dismiss alert dialog
-                                        },
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            },
-                            child: Text(
-                              'Build Barcode',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
+
                       ],
                     ),
                   ],

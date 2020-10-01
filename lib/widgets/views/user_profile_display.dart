@@ -17,14 +17,7 @@ class UserInfoDisplay extends StatelessWidget{
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       floatingActionButton: Consumer<MedicalClientProvider>(
         builder: (context, provider,child) {
-          return FloatingActionButton(
-            child: Icon(
-              LineAwesomeIcons.backward,
-              color: Colors.white,
-            ),
-            onPressed: (){
-              provider.changeIsOptionsSelected();
-              Navigator.of(context).pop();});
+          return GoBackButton();
         }
       ),
       body: Container(

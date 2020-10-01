@@ -9,13 +9,13 @@ import 'package:image_picker/image_picker.dart';
 class BarcodeDetectorMachine {
 
    Future<PickedFile> pickImage()async{
-      PickedFile pickedImage= await ImagePicker().getImage(source: ImageSource.camera);
+      PickedFile pickedImage= await ImagePicker().getImage(source: ImageSource.gallery);
 
       return pickedImage;
    }
 
    final BarcodeDetector barcodeDetector = FirebaseVision.instance.barcodeDetector();
-  Future<String> detectBarcodes()async{
+  Future<Map> detectBarcodes()async{
     final FirebaseVisionImage visionImage =
     //FirebaseVisionImage.fromBytes(await pickImage(),null);
     FirebaseVisionImage.fromFile(File((await pickImage()).path));
@@ -99,7 +99,7 @@ class BarcodeDetectorMachine {
       }
 
       barcodeDetector.close();
-      return result;
+      return {'result':result,'display value':barcode.displayValue};
     }
   }
 
