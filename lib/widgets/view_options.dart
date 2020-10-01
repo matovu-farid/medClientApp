@@ -102,7 +102,7 @@ class OptionsScreen extends StatelessWidget {
                     },
                   child: ClipOval(
                     child: Container(
-                      color: Colors.amber,
+                      color: Colors.grey[700],
                       child: Center(
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),

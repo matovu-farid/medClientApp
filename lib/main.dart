@@ -11,6 +11,7 @@ main(List<String> args) {
 }
 
 class MedClientApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     final Future<FirebaseApp> _initialization = Firebase.initializeApp();
@@ -18,7 +19,7 @@ class MedClientApp extends StatelessWidget {
     return MaterialApp(
       //debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: Colors.green,
+        primaryColor: Colors.grey[900],
       ),
       home: Scaffold(
         //resizeToAvoidBottomPadding: true,

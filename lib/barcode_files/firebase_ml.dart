@@ -9,7 +9,8 @@ import 'package:image_picker/image_picker.dart';
 class BarcodeDetectorMachine {
 
    Future<PickedFile> pickImage()async{
-      PickedFile pickedImage= await ImagePicker().getImage(source: ImageSource.gallery);
+     var picker = ImagePicker();
+      PickedFile pickedImage= await picker.getImage(source: ImageSource.camera);
 
       return pickedImage;
    }
