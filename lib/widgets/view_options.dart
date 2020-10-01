@@ -34,6 +34,7 @@ class ViewOptions extends StatelessWidget {
           return Form(
             key: _formkey,
             child: MaterialApp(
+              debugShowCheckedModeBanner: false,
               routes: {
                 '/': (BuildContext context)=>OptionsScreen(options: options),
                 '/UserInfoDisplay':(BuildContext context)=>UserInfoDisplay(_client),

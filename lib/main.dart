@@ -16,6 +16,7 @@ class MedClientApp extends StatelessWidget {
     final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
     return MaterialApp(
+      //debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: Colors.green,
       ),

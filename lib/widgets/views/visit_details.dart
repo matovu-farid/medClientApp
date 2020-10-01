@@ -33,6 +33,7 @@ class _VisitDetailsState extends State<VisitDetails> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+
       body: Form(
         key: _formKey,
         child: Stack(
@@ -40,7 +41,8 @@ class _VisitDetailsState extends State<VisitDetails> {
             ListView(
               shrinkWrap: true,
               children: [
-                ...widget.provider.medicalInfoDetails.entries.map((e) {
+
+                ...widget.provider.medicalInfoDetails.entries.where((value) => value.key !='hospital services').map((e) {
                   if (e.key == 'Drugs Prescribed') {
                     return Column(
                       children: [
@@ -77,7 +79,7 @@ class _VisitDetailsState extends State<VisitDetails> {
                   }
                   //TODO: change output to int
                   return RegInputField(
-                    initialValue: e.value.toString(),
+                    initialValue: (e.value.toString()=='')?'':e.value.toString(),
                     labelText: e.key,
                     onSaved: (String value) {
                       widget.provider.medicalInfoDetails[e.key] = value;
@@ -86,7 +88,11 @@ class _VisitDetailsState extends State<VisitDetails> {
                       widget.provider.medicalInfoDetails[e.key] = value;
                     },
                   );
-                }).toList()
+                }).toList(),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: 100,
+                )
               ],
             ),
             GoBackButton(
