@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:medClientApp/models/clients/history.dart';
 import 'package:medClientApp/models/clients/myclient.dart';
+import 'package:medClientApp/retrieve_client.dart';
 import 'package:medClientApp/widgets/views/user_profile_display.dart';
 
 import 'widgets/views/visit_details.dart';
@@ -12,11 +13,11 @@ UserHistory makeHistory(MyClient client,MedicalInfo medicalInfo){
       hospitalName: 'AAR',
       patientInfo: PatientInfo(
         //TODO: to be adjusted for beneficiaries
-          patientName: client.userProfile.name,
+          patientName: ClientStore().client.userProfile.name,
           relationship: 'self',
           medicalCardNo: '000000000',
-          gender: client.userProfile.gender,
-          dateOfBirth: client.userProfile.dateOfBirth),
+          gender: ClientStore().client.userProfile.gender,
+          dateOfBirth: ClientStore().client.userProfile.dateOfBirth),
 
       clarification: Clarification(
         doctorsQualification: 'optician',
@@ -25,9 +26,8 @@ UserHistory makeHistory(MyClient client,MedicalInfo medicalInfo){
 }
 
 class MedicalClientProvider extends ChangeNotifier{
-  //TODO: save the medicalInfo of the client and therefore save their visit history
-  //TODO: send the client back to the database and check whether the history is fixed
-  MyClient _client;
+  //Client form singleton;
+  MyClient _client = ClientStore().client;
   bool obscurePassword = true;
 
 String _firebaseId = '';

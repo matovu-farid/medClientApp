@@ -35,7 +35,7 @@ class GetClient extends StatelessWidget {
     String fetchedId;
     _editingController = TextEditingController(text: '08076c2f-6d18-4c38-9a28-83c2dcf45c36');
 
-     final store = IdStore();
+     final store = ClientStore();
      store.id = _editingController.text;
     return ChangeNotifierProvider<MedicalClientProvider>(
       create: (context) => MedicalClientProvider(),
@@ -54,7 +54,7 @@ class GetClient extends StatelessWidget {
                         decoration: InputDecoration(labelText: 'Enter Id'),
                         onChanged: (value) {
                           _editingController.text = value;
-                          IdStore idStore = IdStore();
+                          ClientStore idStore = ClientStore();
                           idStore.id=value;
 
                         },
@@ -150,9 +150,9 @@ class GetClient extends StatelessWidget {
 
                 if (snapshot.connectionState == ConnectionState.done) {
                   Map<String, dynamic> data = snapshot.data.data();
-                  MyClient client =
-                      MyClient.fromJson(parseString(data['client']));
+                  MyClient client = MyClient.fromJson(parseString(data['client']));
                   parseString(data['client']);
+                  ClientStore().client = client;
                   return ViewOptions(client);
                 }
 
@@ -179,16 +179,21 @@ class OnTap {
 
 
 
- class IdStore{
+ class ClientStore{
    String _id = '';
-   IdStore._instance();
-  static final IdStore _idStore = IdStore._instance();
-  factory IdStore(){
+   MyClient _client;
+   ClientStore._instance();
+  static final ClientStore _idStore = ClientStore._instance();
+  factory ClientStore(){
     return _idStore;}
 
     set id(String idGot){
     _id = idGot;
     }
+    set client(MyClient myclient){
+    _client = myclient;
+    }
+    MyClient get client=>_client;
     String get id =>_id;
 
  }

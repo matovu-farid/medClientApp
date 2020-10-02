@@ -84,12 +84,13 @@ class _HospitalServicesDisplayState extends State<HospitalServicesDisplay> {
     widget.provider.setMedicalInfo();
      MyClient client= widget.provider.clientToSubmit();
      sendClientBack(client);
+     Navigator.of(context).popUntil(ModalRoute.withName('/'));
 
 
 
   }
   sendClientBack(MyClient client)async{
-    DocumentReference docRef= FirebaseFirestore.instance.collection('clients').doc(IdStore().id);
+    DocumentReference docRef= FirebaseFirestore.instance.collection('clients').doc(ClientStore().id);
      DocumentSnapshot doc= await docRef.get();
      docRef.set({'client':json.encode(client.toJson())});
   }
