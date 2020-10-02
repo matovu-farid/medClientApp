@@ -22,7 +22,7 @@ class GetClient extends StatelessWidget {
     return json.decode(clientJson);
   }
 
-  TextEditingController _editingController;
+  //TextEditingController _editingController=TextEditingController(text: '08076c2f-6d18-4c38-9a28-83c2dcf45c36');
 
 
 
@@ -33,10 +33,11 @@ class GetClient extends StatelessWidget {
     CollectionReference clients = FirebaseFirestore.instance.collection('clients');
     GlobalKey<FormState> formKey = GlobalKey<FormState>();
     String fetchedId;
-    _editingController = TextEditingController(text: '08076c2f-6d18-4c38-9a28-83c2dcf45c36');
 
-     final store = ClientStore();
-     store.id = _editingController.text;
+
+     //final store = ClientStore();
+     //store.id = _editingController.text;
+
     return ChangeNotifierProvider<MedicalClientProvider>(
       create: (context) => MedicalClientProvider(),
       child: ListView(
@@ -50,10 +51,11 @@ class GetClient extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
-                        controller: _editingController,
+                        initialValue: ClientStore().id,
+//                        controller: _editingController,
                         decoration: InputDecoration(labelText: 'Enter Id'),
                         onChanged: (value) {
-                          _editingController.text = value;
+
                           ClientStore idStore = ClientStore();
                           idStore.id=value;
 
@@ -72,7 +74,7 @@ class GetClient extends StatelessWidget {
                                 color: Colors.grey[700],
                                 onPressed: () {
                                   //  await _authenticate();
-                                  OnTap().sink.add(_editingController.text);
+                                  OnTap().sink.add(ClientStore().id);
                                 },
                                 child: Text(
                                   'Fetch Client',
@@ -141,7 +143,7 @@ class GetClient extends StatelessWidget {
           Align(
             alignment: Alignment.center,
             child: FutureBuilder<DocumentSnapshot>(
-              future: clients.doc('${_editingController.text}').get(),
+              future: clients.doc('${ClientStore().id}').get(),
               builder: (BuildContext context,
                   AsyncSnapshot<DocumentSnapshot> snapshot) {
                 if (snapshot.hasError) {
@@ -180,7 +182,7 @@ class OnTap {
 
 
  class ClientStore{
-   String _id = '';
+   String _id = '08076c2f-6d18-4c38-9a28-83c2dcf45c36';
    MyClient _client;
    ClientStore._instance();
   static final ClientStore _idStore = ClientStore._instance();
