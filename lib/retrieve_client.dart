@@ -35,6 +35,8 @@ class GetClient extends StatelessWidget {
     String fetchedId;
     _editingController = TextEditingController(text: '08076c2f-6d18-4c38-9a28-83c2dcf45c36');
 
+     final store = IdStore();
+     store.id = _editingController.text;
     return ChangeNotifierProvider<MedicalClientProvider>(
       create: (context) => MedicalClientProvider(),
       child: ListView(
@@ -52,6 +54,9 @@ class GetClient extends StatelessWidget {
                         decoration: InputDecoration(labelText: 'Enter Id'),
                         onChanged: (value) {
                           _editingController.text = value;
+                          IdStore idStore = IdStore();
+                          idStore.id=value;
+
                         },
                       ),
                     ),
@@ -80,13 +85,8 @@ class GetClient extends StatelessWidget {
                               child: FlatButton(
                                 color: Colors.grey[700],
                                 onPressed: () async{
-                                  //  await _authenticate();
-                                  //scannedBarcode= await BarcodeScanner.scan();
-//                              setState(() {
-//
-//                              });
+
                                  Map map = await BarcodeDetectorMachine().detectBarcodes();
-                                //Scaffold.of(context).showSnackBar(SnackBar(content: Text(map['result'])));
 
                                  showDialog<void>(
                                    context: context,
@@ -176,3 +176,19 @@ class OnTap {
 
   Stream<String> get stream => controller.stream;
 }
+
+
+
+ class IdStore{
+   String _id = '';
+   IdStore._instance();
+  static final IdStore _idStore = IdStore._instance();
+  factory IdStore(){
+    return _idStore;}
+
+    set id(String idGot){
+    _id = idGot;
+    }
+    String get id =>_id;
+
+ }

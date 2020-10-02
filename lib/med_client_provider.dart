@@ -5,11 +5,37 @@ import 'package:medClientApp/widgets/views/user_profile_display.dart';
 
 import 'widgets/views/visit_details.dart';
 
+UserHistory makeHistory(MyClient client,MedicalInfo medicalInfo){
+  return UserHistory(
+    medicalInfo: medicalInfo,
+      hospitalLocation: 'Kampala',
+      hospitalName: 'AAR',
+      patientInfo: PatientInfo(
+        //TODO: to be adjusted for beneficiaries
+          patientName: client.userProfile.name,
+          relationship: 'self',
+          medicalCardNo: '000000000',
+          gender: client.userProfile.gender,
+          dateOfBirth: client.userProfile.dateOfBirth),
+
+      clarification: Clarification(
+        doctorsQualification: 'optician',
+        doctorsName: 'Farid',
+      ));
+}
+
 class MedicalClientProvider extends ChangeNotifier{
-  //TODO: save the medicalInfo of the client and theerefore save their visit history
+  //TODO: save the medicalInfo of the client and therefore save their visit history
   //TODO: send the client back to the database and check whether the history is fixed
   MyClient _client;
   bool obscurePassword = true;
+
+String _firebaseId = '';
+set firebaseId(String id){
+  this._firebaseId=id;
+  notifyListeners();
+}
+String get firebaseId =>_firebaseId;
   MedicalInfo medicalInfo = MedicalInfo(
       drugsPrescribed: {},
       natureOfillness: '' ,
@@ -18,6 +44,7 @@ class MedicalClientProvider extends ChangeNotifier{
       consultationFee: 0,
       hospitalServices: []
   );
+
   bool isOptionsSelected = false;
   bool isMedicalInfoFilled = false;
   final medicalInfoDetails = {
@@ -50,33 +77,22 @@ MyClient get client =>_client;
 
   //should only be set after checking that the parameters are set
   setMedicalInfo (){
-
     medicalInfo
       ..natureOfillness= medicalInfoDetails['Nature of illness']
       ..diagnosis= medicalInfoDetails['Diagnosis']
       ..condition= medicalInfoDetails['Condition']
       ..consultationFee = medicalInfoDetails['Consultation Fee']
       ..hospitalServices = medicalInfoDetails['hospital services'];
-
-  print('$medicalInfo');
-
-
-
   }
-  checkIfMedicalInfoFilled(){
-    //TODO: FIX THIS
-   //  List<Map<String,String>> listOfEmpties = medicalInfoDetails.entries.where((element) => element.value=='').map((e) => {e.key:e.value}).toList();
-    // isMedicalInfoFilled =  listOfEmpties.length>0?false:true;
-     notifyListeners();
-
-  }
+MyClient clientToSubmit(){
+     final UserHistory history= makeHistory(_client, medicalInfo);
+     _client.historyList.add(history);
+     return _client;
 
 }
 
-//class DrugCollection{
-//  List<DrugsRow> drugList = [];
-//
-//}
+
+}
 
 class DrugsRow extends StatelessWidget {
   final MedicalClientProvider provider;
@@ -99,7 +115,6 @@ class DrugsRow extends StatelessWidget {
               child: RegInputField(
                 isOptional: true,
                 isCollapsed: false,
-                // onSaved: (drugName) {},
                 onChanged: (drugName) {
                   this.drugName = drugName;
                 },
@@ -113,10 +128,7 @@ class DrugsRow extends StatelessWidget {
                 keyboardType: TextInputType.number,
                 onSaved: (cost) {
                   drugMap[drugName] = drugCost;
-//                  var drugsPrescribed= provider.medicalInfoDetails['Drugs Prescribed'];
                   provider.medicalInfo.drugsPrescribed.addEntries([MapEntry(drugName, drugCost)]);
-//                  drugsPrescribed.addEntries([MapEntry(drugName, drugCost)]);
-
                 },
                 onChanged: (drugCost){
                   this.drugCost = int.parse(drugCost);

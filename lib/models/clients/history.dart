@@ -96,11 +96,12 @@ class PatientInfo {
   final String dateOfBirth;
 
   PatientInfo(
-      {this.patientName,
-        this.relationship,
-        this.medicalCardNo,
-        this.gender,
-        this.dateOfBirth});
+      {
+        @required this.patientName,
+        @required this.relationship,
+        @required this.medicalCardNo,
+        @required this.gender,
+        @required this.dateOfBirth});
   factory PatientInfo.fromJson(Map<String, dynamic> json) => _$PatientInfoFromJson(json);
   Map<String, dynamic> toJson() => _$PatientInfoToJson(this);
 

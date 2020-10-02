@@ -7,6 +7,7 @@ import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:medClientApp/med_client_provider.dart';
 import 'package:medClientApp/models/clients/history.dart';
 import 'package:medClientApp/models/clients/myclient.dart';
+import 'package:medClientApp/retrieve_client.dart';
 import 'package:medClientApp/widgets/utilities/go_back.dart';
 import 'package:medClientApp/widgets/utilities/submit_button.dart';
 import 'package:medClientApp/widgets/views/user_profile_display.dart';
@@ -81,12 +82,24 @@ class _HospitalServicesDisplayState extends State<HospitalServicesDisplay> {
       ];
     }
     widget.provider.setMedicalInfo();
+     MyClient client= widget.provider.clientToSubmit();
+     sendClientBack(client);
+
+
+
   }
+  sendClientBack(MyClient client)async{
+    DocumentReference docRef= FirebaseFirestore.instance.collection('clients').doc(IdStore().id);
+     DocumentSnapshot doc= await docRef.get();
+     docRef.set({'client':json.encode(client.toJson())});
+  }
+
 
   String hospitalSelected;
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: Stack(
         children: [
@@ -122,11 +135,7 @@ class _HospitalServicesDisplayState extends State<HospitalServicesDisplay> {
                                          //var value = benefitMap[key];
                                          benefitMap[key] = int.parse(textGot);
                                       },
-//                                      onChanged: (textGot) {
-//                                        var key = benefitMap.keys.first;
-//                                        //var value = benefitMap[key];
-//                                        benefitMap[key] = int.parse(textGot);
-//                                      },
+//
                                     ),
                                 ],
                               ),

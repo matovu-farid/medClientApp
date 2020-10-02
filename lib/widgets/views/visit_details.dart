@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:regexpattern/regexpattern.dart';
 
 import '../../med_client_provider.dart';
+import '../../retrieve_client.dart';
 
 class VisitDetails extends StatefulWidget {
   final MyClient client;
@@ -25,12 +26,13 @@ class _VisitDetailsState extends State<VisitDetails> {
   void goToHospitalServices() {
     _formKey.currentState.validate();
     _formKey.currentState.save();
-    widget.provider.checkIfMedicalInfoFilled();
+    //widget.provider.checkIfMedicalInfoFilled();
   }
 
 
   @override
   Widget build(BuildContext context) {
+
 
     return Scaffold(
 
