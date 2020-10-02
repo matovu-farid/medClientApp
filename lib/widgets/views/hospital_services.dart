@@ -85,6 +85,7 @@ class _HospitalServicesDisplayState extends State<HospitalServicesDisplay> {
      MyClient client= widget.provider.clientToSubmit();
      sendClientBack(client);
      Navigator.of(context).popUntil(ModalRoute.withName('/'));
+    widget.provider.changeIsOptionsSelected();
 
 
 
