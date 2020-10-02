@@ -1,42 +1,29 @@
 import 'dart:async';
+import 'package:medClientApp/fetch_client_and_scan_barcode.dart';
 import 'dart:convert';
-import 'dart:io';
-import 'package:barcode_flutter/barcode_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_indicator/loading_indicator.dart';
-import 'package:medClientApp/barcode_files/firebase_ml.dart';
 import 'package:medClientApp/med_client_provider.dart';
 import 'package:medClientApp/models/clients/myclient.dart';
 import 'package:medClientApp/widgets/view_options.dart';
 import 'package:provider/provider.dart';
 
-
 class GetClient extends StatelessWidget {
-
-  String scannedBarcode = '';
-
-
   parseString(String clientJson) {
     return json.decode(clientJson);
   }
 
-  //TextEditingController _editingController=TextEditingController(text: '08076c2f-6d18-4c38-9a28-83c2dcf45c36');
-
-
-
-
-
   @override
   Widget build(BuildContext context) {
-    CollectionReference clients = FirebaseFirestore.instance.collection('clients');
+    CollectionReference clients =
+        FirebaseFirestore.instance.collection('clients');
     GlobalKey<FormState> formKey = GlobalKey<FormState>();
     String fetchedId;
 
-
-     //final store = ClientStore();
-     //store.id = _editingController.text;
+    //final store = ClientStore();
+    //store.id = _editingController.text;
 
     return ChangeNotifierProvider<MedicalClientProvider>(
       create: (context) => MedicalClientProvider(),
@@ -52,86 +39,14 @@ class GetClient extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
                         initialValue: ClientStore().id,
-//                        controller: _editingController,
                         decoration: InputDecoration(labelText: 'Enter Id'),
                         onChanged: (value) {
-
                           ClientStore idStore = ClientStore();
-                          idStore.id=value;
-
+                          idStore.id = value;
                         },
                       ),
                     ),
-                    Text(scannedBarcode),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Center(
-                        child: Wrap(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(2.0),
-                              child: FlatButton(
-                                color: Colors.grey[700],
-                                onPressed: () {
-                                  //  await _authenticate();
-                                  OnTap().sink.add(ClientStore().id);
-                                },
-                                child: Text(
-                                  'Fetch Client',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(2.0),
-                              child: FlatButton(
-                                color: Colors.grey[700],
-                                onPressed: () async{
-
-                                 Map map = await BarcodeDetectorMachine().detectBarcodes();
-
-                                 showDialog<void>(
-                                   context: context,
-                                   barrierDismissible: true,
-                                   // false = user must tap button, true = tap outside dialog
-                                   builder: (BuildContext dialogContext) {
-                                     return AlertDialog(
-                                       title: Text('title'),
-                                       content:BarCodeImage(
-                                         params: Code39BarCodeParams(
-                                           map['display value'],
-                                           lineWidth: 1.0,                // width for a single black/white bar (default: 2.0)
-                                           barHeight: 60,               // height for the entire widget (default: 100.0)
-                                           withText: true,                // Render with text label or not (default: false)
-                                         ),
-                                         onError: (error) {               // Error handler
-                                           print('error = $error');
-                                         },
-                                       ),
-                                       actions: <Widget>[
-                                         FlatButton(
-                                           child: Text('cancel'),
-                                           onPressed: () {
-                                             Navigator.of(dialogContext)
-                                                 .pop(); // Dismiss alert dialog
-                                           },
-                                         ),
-                                       ],
-                                     );
-                                   },
-                                 );
-                                },
-                                child: Text(
-                                  'Scan Barcode',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            ),
-
-                          ],
-                        ),
-                      ),
-                    ),
+                    FetchClientAndScanBarcode(),
                   ],
                 ),
               );
@@ -147,12 +62,13 @@ class GetClient extends StatelessWidget {
               builder: (BuildContext context,
                   AsyncSnapshot<DocumentSnapshot> snapshot) {
                 if (snapshot.hasError) {
-                  return Text("Something went wrong");
+                  return Text("Connect to the internet");
                 }
 
                 if (snapshot.connectionState == ConnectionState.done) {
                   Map<String, dynamic> data = snapshot.data.data();
-                  MyClient client = MyClient.fromJson(parseString(data['client']));
+                  MyClient client =
+                      MyClient.fromJson(parseString(data['client']));
                   parseString(data['client']);
                   ClientStore().client = client;
                   return ViewOptions(client);
@@ -160,7 +76,7 @@ class GetClient extends StatelessWidget {
 
                 return LoadingIndicator(
                   indicatorType: Indicator.ballPulse,
-                  color: Colors.amber,
+                  color: Colors.blueGrey[800],
                 );
               },
             ),
@@ -179,23 +95,23 @@ class OnTap {
   Stream<String> get stream => controller.stream;
 }
 
-
-
- class ClientStore{
-   String _id = '08076c2f-6d18-4c38-9a28-83c2dcf45c36';
-   MyClient _client;
-   ClientStore._instance();
+class ClientStore {
+  String _id = '08076c2f-6d18-4c38-9a28-83c2dcf45c36';
+  MyClient _client;
+  ClientStore._instance();
   static final ClientStore _idStore = ClientStore._instance();
-  factory ClientStore(){
-    return _idStore;}
+  factory ClientStore() {
+    return _idStore;
+  }
 
-    set id(String idGot){
+  set id(String idGot) {
     _id = idGot;
-    }
-    set client(MyClient myclient){
-    _client = myclient;
-    }
-    MyClient get client=>_client;
-    String get id =>_id;
+  }
 
- }
+  set client(MyClient myclient) {
+    _client = myclient;
+  }
+
+  MyClient get client => _client;
+  String get id => _id;
+}
